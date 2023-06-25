@@ -51,7 +51,7 @@ class Users extends AbstractTable
             });
         });
         return QueryBuilder::for(User::class)
-            ->defaultSort('username')
+            ->defaultSort('id')
             ->allowedSorts(['id', 'username', 'first_name', 'last_name', 'email'])
             ->allowedFilters(['username', 'first_name', 'last_name', 'email', $globalSearch]);
     }
@@ -68,9 +68,14 @@ class Users extends AbstractTable
             ->withGlobalSearch(columns: ['id', 'username', 'first_name', 'last_name', 'email'])
             ->column('id', sortable: true)
             ->column('username', sortable: true)
-            ->column('first_name', sortable: true)
-            ->column('last_name', sortable: true)
+            // ->column('first_name', sortable: true)
+            // ->column('last_name', sortable: true)
             ->column('email', sortable: true)
+            // ->column('created_at', sortable: true)
+            // ->rowLink(function (User $user) {
+            //     return route('admin.users.edit', $user);
+            // })
+            ->column('action', sortable: true)
             ->paginate(10);
     }
 }
