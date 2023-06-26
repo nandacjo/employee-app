@@ -13,4 +13,9 @@ class Country extends Model
         'country_code',
         'name'
     ];
+
+    public function countries()
+    {
+        return $this->hasMany(State::class);
+    }
 }
