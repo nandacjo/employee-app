@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Forms\CreateStateForm;
 use App\Forms\UpdateStateForm;
-use App\Http\Requests\StoreStateRequest;
-use App\Http\Requests\UpdateStateRequest;
 use App\Models\State;
 use App\Tables\States;
 use Illuminate\Http\Request;
