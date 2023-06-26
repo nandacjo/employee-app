@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCountryRequest;
-use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country;
 use App\Tables\Countries;
+use ProtoneMedia\Splade\SpladeForm;
 use ProtoneMedia\Splade\Facades\Splade;
+use App\Http\Requests\StoreCountryRequest;
+use ProtoneMedia\Splade\FormBuilder\Input;
+use App\Http\Requests\UpdateCountryRequest;
+use ProtoneMedia\Splade\FormBuilder\Submit;
 
 class CountryController extends Controller
 {
@@ -51,7 +54,20 @@ class CountryController extends Controller
      */
     public function edit(Country $country)
     {
-        //
+        $form = SpladeForm::make()
+            ->action(route('admin.countries.update', $country))
+            ->fields([
+                Input::make('country_code')->label('Country Code'),
+                Input::make('name')->label('Name'),
+                Submit::make()->label('Updated'),
+            ])->fill($country)
+            ->class('p-4 mt-4 shadow-md bg-white rounded-md space-y-2')
+            ->method('PUT');
+
+        return view('admin.countries.edit', [
+            'form' => $form,
+            'country' => $country
+        ]);
     }
 
     /**
@@ -59,7 +75,9 @@ class CountryController extends Controller
      */
     public function update(UpdateCountryRequest $request, Country $country)
     {
-        //
+        $country->update($request->validated());
+        Splade::toast('Country updated')->autoDismiss(3);
+        return to_route('admin.countries.index');
     }
 
     /**
@@ -67,6 +85,8 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        //
+        $country->delete();
+        Splade::toast('Country deleted')->autoDismiss(3);
+        return back();
     }
 }
