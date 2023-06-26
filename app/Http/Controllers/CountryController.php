@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCountryRequest;
 use App\Http\Requests\UpdateCountryRequest;
 use App\Models\Country;
+use App\Tables\Countries;
+use ProtoneMedia\Splade\Facades\Splade;
 
 class CountryController extends Controller
 {
@@ -13,7 +15,9 @@ class CountryController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.countries.index', [
+            'countries' => Countries::class
+        ]);
     }
 
     /**
@@ -21,7 +25,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.countries.create');
     }
 
     /**
@@ -29,7 +33,9 @@ class CountryController extends Controller
      */
     public function store(StoreCountryRequest $request)
     {
-        //
+        Country::create($request->validated());
+        Splade::toast('Country created')->autoDismiss(3);
+        return to_route('admin.countries.index');
     }
 
     /**
