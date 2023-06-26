@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDepartmentRequest;
 use App\Http\Requests\UpdateDepartmentRequest;
 use App\Models\Department;
+use App\Tables\Departments;
+use ProtoneMedia\Splade\Facades\Splade;
+use ProtoneMedia\Splade\FormBuilder\Input;
+use ProtoneMedia\Splade\FormBuilder\Submit;
+use ProtoneMedia\Splade\SpladeForm;
 
 class DepartmentController extends Controller
 {
@@ -13,7 +18,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.departments.index', [
+            'departments' => Departments::class
+        ]);
     }
 
     /**
@@ -21,7 +28,17 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        //
+        $form = SpladeForm::make()
+            ->action(route('admin.departments.store'))
+            ->method('POST')
+            ->fields([
+                Input::make('name')->label('Department Name')->placeholder('Department Name'),
+                Submit::make()->label('Save'),
+            ])
+            ->class('space-y-4 p-4 bg-white rounded-md shadow-md');
+        return view('admin.departments.create', [
+            'form' => $form
+        ]);
     }
 
     /**
@@ -29,7 +46,9 @@ class DepartmentController extends Controller
      */
     public function store(StoreDepartmentRequest $request)
     {
-        //
+        Department::create($request->validated());
+        Splade::toast('Department created')->autoDismiss(3);
+        return to_route('admin.departments.index');
     }
 
     /**
@@ -45,7 +64,19 @@ class DepartmentController extends Controller
      */
     public function edit(Department $department)
     {
-        //
+        $form = SpladeForm::make()
+            ->action(route('admin.departments.update', $department))
+            ->method('PUT')
+            ->fields([
+                Input::make('name')->label('Department Name')->placeholder('Department Name'),
+                Submit::make()->label('Save'),
+            ])
+            ->fill($department)
+            ->class('space-y-4 p-4 bg-white rounded-md shadow-md');
+
+        return view('admin.departments.edit', [
+            'form' => $form
+        ]);
     }
 
     /**
@@ -53,7 +84,9 @@ class DepartmentController extends Controller
      */
     public function update(UpdateDepartmentRequest $request, Department $department)
     {
-        //
+        $department->update($request->validated());
+        Splade::toast('Department updated')->autoDismiss(3);
+        return to_route('admin.departments.index');
     }
 
     /**
@@ -61,6 +94,8 @@ class DepartmentController extends Controller
      */
     public function destroy(Department $department)
     {
-        //
+        $department->delete();
+        Splade::toast('Department deleted')->autoDismiss(3);
+        return back();
     }
 }
