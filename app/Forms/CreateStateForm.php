@@ -22,11 +22,11 @@ class CreateStateForm extends AbstractForm
     public function fields(): array
     {
         return [
-            Text::make('name')->label('Name')->placeholder('Name'),
+            Text::make('name')->label('Name')->placeholder('Name')->rules(['required', 'max:100', 'min:3']),
             Select::make('country_id')
                 ->label('Choose a country')
                 ->placeholder('-- Choose a country --')
-                ->options(Country::pluck('name', 'id')->toArray()),
+                ->options(Country::pluck('name', 'id')->toArray())->rules(['required']),
 
             Submit::make()
                 ->label(__('Save')),

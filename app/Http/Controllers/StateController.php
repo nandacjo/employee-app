@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Forms\CreateStateForm;
+use App\Forms\UpdateStateForm;
 use App\Http\Requests\StoreStateRequest;
 use App\Http\Requests\UpdateStateRequest;
 use App\Models\State;
@@ -57,15 +58,23 @@ class StateController extends Controller
      */
     public function edit(State $state)
     {
-        //
+        return view('admin.states.edit', [
+            'form' => UpdateStateForm::make()
+                ->action(route('admin.states.update', $state))
+                ->fill($state),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStateRequest $request, State $state)
+    public function update(Request $request, UpdateStateForm $form, State $state)
     {
-        //
+        $data = $form->validate($request);
+        $state->update($data);
+
+        Splade::toast('States updated')->autoDismiss(3);
+        return to_route('admin.states.index');
     }
 
     /**
@@ -73,6 +82,9 @@ class StateController extends Controller
      */
     public function destroy(State $state)
     {
-        //
+        $state->delete();
+
+        Splade::toast('States deleted')->autoDismiss(3);
+        return back();
     }
 }
