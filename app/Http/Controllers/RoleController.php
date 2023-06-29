@@ -39,7 +39,6 @@ class RoleController extends Controller
     {
         Role::create($request->validated());
         Splade::toast('Role created')->autoDismiss(3);
-
         return to_route('admin.roles.index');
     }
 
@@ -55,7 +54,7 @@ class RoleController extends Controller
             ->fill($role)
             ->class('py-4 p-4 bg-white rounded-md space-y-4');
 
-        return view('admin.roles.create', [
+        return view('admin.roles.edit', [
             'form' => $form
         ]);
     }
