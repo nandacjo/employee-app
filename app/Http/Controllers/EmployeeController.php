@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
+use App\Tables\Employees;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +14,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        return view("admin.employees.index", [
+            'employees' => Employees::class,
+        ]);
     }
 
     /**
