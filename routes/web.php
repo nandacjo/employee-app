@@ -47,8 +47,8 @@ Route::middleware('splade')->group(function () {
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
-    Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+    Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('index');
         Route::resource('/users', UserController::class);
         Route::resource('/employees', EmployeeController::class);
         Route::resource('/countries', CountryController::class);
